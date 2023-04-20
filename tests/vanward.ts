@@ -4,9 +4,9 @@ import {
   web3,
   utils,
   BN,
-} from '@project-serum/anchor';
-import * as anchor from '@project-serum/anchor';
-import Web3 from 'web3';
+  setProvider,
+  workspace,
+} from '@coral-xyz/anchor';
 import { expect } from 'chai';
 import { Vanward } from '../target/types/vanward';
 
@@ -16,16 +16,16 @@ describe('vanward', async () => {
   const certificationYear = 2024;
 
   // Configure the client to use the local cluster.
-  const provider = anchor.AnchorProvider.env();
-  anchor.setProvider(provider);
-  const program = anchor.workspace.Vanward as Program<Vanward>;
+  const provider = AnchorProvider.env();
+  setProvider(provider);
+  const program = workspace.Vanward as Program<Vanward>;
 
   const [certificationPda, certBump] =
-    await anchor.web3.PublicKey.findProgramAddressSync(
+    await web3.PublicKey.findProgramAddressSync(
       [
-        anchor.utils.bytes.utf8.encode('certification'),
-        anchor.utils.bytes.utf8.encode(certificationId),
-        new anchor.BN(certificationYear).toBuffer('le', 2),
+        utils.bytes.utf8.encode('certification'),
+        utils.bytes.utf8.encode(certificationId),
+        new BN(certificationYear).toBuffer('le', 2),
         provider.wallet.publicKey.toBuffer(),
       ],
       program.programId
