@@ -31,6 +31,18 @@ describe('vanward', async () => {
       program.programId
     );
 
+  const module = 'Week 1';
+  const credits = 1;
+
+  const [requirementPda, reqBump] = await web3.PublicKey.findProgramAddressSync(
+    [
+      utils.bytes.utf8.encode('requirement'),
+      utils.bytes.utf8.encode(module),
+      provider.wallet.publicKey.toBuffer(),
+    ],
+    program.programId
+  );
+
   it('can add a certification', async () => {
     const tx = await program.methods
       .addCertification(
@@ -52,5 +64,47 @@ describe('vanward', async () => {
     expect(certAccount.id).equals(certificationId);
     expect(certAccount.year).equals(certificationYear);
     expect(certAccount.title).equals(certificationTitle);
+  });
+
+  it('can add a requirement', async () => {
+    const module = 'Week 1';
+    const credits = 1;
+
+    const [requirementPda, reqBump] =
+      await web3.PublicKey.findProgramAddressSync(
+        [
+          utils.bytes.utf8.encode('requirement'),
+          utils.bytes.utf8.encode(certificationId),
+          provider.wallet.publicKey.toBuffer(),
+        ],
+        program.programId
+      );
+
+    const tx = await program.methods
+      .addRequirement(certificationId, credits, reqBump)
+      .accounts({
+        requirement: requirementPda,
+        certification: certificationPda,
+        user: provider.wallet.publicKey,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
+
+    let reqAccount = await program.account.requirement.fetch(requirementPda);
+    expect(reqAccount.module).equals(certificationId);
+    expect(reqAccount.credits).equals(credits);
+  });
+
+  it('can get certification requirements', async () => {
+    let reqAccounts = await program.account.requirement.all([
+      {
+        memcmp: {
+          offset: 8,
+          bytes: certificationPda.toBase58(),
+        },
+      },
+    ]);
+
+    expect(reqAccounts[0].account.module).equals(certificationId);
   });
 });
