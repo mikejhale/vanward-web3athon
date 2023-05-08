@@ -11,13 +11,11 @@ const Home: NextPage = () => {
         <title>Vanward</title>
       </Head>
       <AppBar />
-      <Center>
-        <Box>
-          <Heading as='h1' size='l' color='white' ml={4} mt={8}>
-            Manage Certifications
-          </Heading>
-        </Box>
-      </Center>
+      <Box>
+        <Heading as='h1' size='l' ml={4} mt={8}>
+          Manage Certifications
+        </Heading>
+      </Box>
     </div>
   );
 };
