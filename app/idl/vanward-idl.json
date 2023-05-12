@@ -1,0 +1,144 @@
+{
+  "version": "0.1.0",
+  "name": "vanward",
+  "instructions": [
+    {
+      "name": "addCertification",
+      "accounts": [
+        {
+          "name": "certification",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "year",
+          "type": "u16"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "addRequirement",
+      "accounts": [
+        {
+          "name": "requirement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "certification",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "module",
+          "type": "string"
+        },
+        {
+          "name": "credits",
+          "type": "u8"
+        },
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Certification",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "type": "u16"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Requirement",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "module",
+            "type": "string"
+          },
+          {
+            "name": "credits",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "address": "AKUscwsW639dX2X8YRSes9mqx221HU1ti9ZDGdX6iVYV"
+  }
+}

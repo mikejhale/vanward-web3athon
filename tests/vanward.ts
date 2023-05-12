@@ -12,7 +12,7 @@ import { Vanward } from '../target/types/vanward';
 
 describe('vanward', async () => {
   const certificationId = 'CERT' + (Math.floor(Math.random() * 90000) + 10000);
-  const certificationTitle = 'My Certification for 2024';
+  const certificationTitle = 'My Other Certification - 2023';
   const certificationYear = 2024;
 
   // Configure the client to use the local cluster.
