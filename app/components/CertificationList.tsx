@@ -31,7 +31,7 @@ export const CertificationList: FC = () => {
   return (
     <Box p={12}>
       <NextLink href='/add-certification' passHref>
-        <Button>Add New Certification</Button>
+        <Button mb={8}>Add New Certification</Button>
       </NextLink>
       {certifications.length > 0 ? (
         certifications.map((c) => (
@@ -40,6 +40,7 @@ export const CertificationList: FC = () => {
             id={c.account.id}
             year={c.account.year}
             title={c.account.title}
+            address={c.publicKey.toString()}
           />
         ))
       ) : (

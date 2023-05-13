@@ -4,24 +4,20 @@ import Head from 'next/head';
 import { AppBar } from '../components/AppBar';
 import { CertificationForm } from '../components/CertificationForm';
 import styles from '../styles/Home.module.css';
-import { useWallet } from '@solana/wallet-adapter-react';
 
-const AddCertification: NextPage = () => {
-  const { publicKey } = useWallet();
+const AddRequirements: NextPage = () => {
   return (
     <div className={styles.App}>
       <Head>
         <title>Vanward</title>
       </Head>
       <AppBar />
-      <Box p={12}>
-        <Heading as='h1' size='l' ml={4} mt={8}>
-          Add Certification
-        </Heading>
-        <CertificationForm />
-      </Box>
+      <Heading as='h1' size='l' ml={4} mt={8}>
+        Certifications
+      </Heading>
+      <Box p={12}>ADD REQUIREMENTS</Box>
     </div>
   );
 };
 
-export default AddCertification;
+export default AddRequirements;

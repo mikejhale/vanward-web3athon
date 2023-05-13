@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       <AppBar />
       <Box>
         <Heading as='h1' size='l' ml={4} mt={8}>
-          Manage Certifications
+          Certifications
         </Heading>
         {publicKey ? <CertificationList /> : null}
       </Box>
