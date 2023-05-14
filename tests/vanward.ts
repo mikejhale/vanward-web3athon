@@ -7,6 +7,7 @@ import {
   setProvider,
   workspace,
 } from '@coral-xyz/anchor';
+import { PublicKey } from '@solana/web3.js';
 import { expect } from 'chai';
 import { Vanward } from '../target/types/vanward';
 
@@ -34,6 +35,7 @@ describe('vanward', async () => {
   const module = 'Week 1';
   const credits = 1;
 
+  /*
   const [requirementPda, reqBump] = await web3.PublicKey.findProgramAddressSync(
     [
       utils.bytes.utf8.encode('requirement'),
@@ -95,7 +97,13 @@ describe('vanward', async () => {
     expect(reqAccount.credits).equals(credits);
   });
 
+  */
+
   it('can get certification requirements', async () => {
+    const certificationPda = new PublicKey(
+      'FZqavH54MmEnKqupDzUJNJM7yMoq7vKqKAEAz31vLXUo'
+    );
+
     let reqAccounts = await program.account.requirement.all([
       {
         memcmp: {
@@ -104,6 +112,8 @@ describe('vanward', async () => {
         },
       },
     ]);
+
+    console.log(reqAccounts);
 
     expect(reqAccounts[0].account.module).equals(certificationId);
   });

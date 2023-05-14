@@ -11,13 +11,13 @@ const AddCertification: NextPage = () => {
   return (
     <div className={styles.App}>
       <Head>
-        <title>Vanward</title>
+        <title>Vanward - Add Certification</title>
       </Head>
       <AppBar />
+      <Heading as='h1' size='xl' ml={8} mt={8}>
+        Add Certification
+      </Heading>
       <Box p={12}>
-        <Heading as='h1' size='l' ml={4} mt={8}>
-          Add Certification
-        </Heading>
         <CertificationForm />
       </Box>
     </div>

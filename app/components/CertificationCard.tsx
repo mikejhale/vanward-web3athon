@@ -11,7 +11,9 @@ import {
   CardBody,
   CardHeader,
   Heading,
+  propNames,
 } from '@chakra-ui/react';
+import { ProgramAccount } from '@coral-xyz/anchor';
 import NextLink from 'next/link';
 import { RiEdit2Line, RiListSettingsFill } from 'react-icons/ri';
 
@@ -20,9 +22,11 @@ type CertCardProps = {
   year: number;
   title: string;
   address: string;
+  requirements?: ProgramAccount[];
 };
 
 export const CertificationCard = (props: CertCardProps) => {
+  console.log('cardProps', props);
   return (
     <Card
       direction={{ base: 'row', sm: 'row' }}
@@ -40,6 +44,7 @@ export const CertificationCard = (props: CertCardProps) => {
             <HStack alignItems='flex-start'>
               <Text fontWeight={500}>{props.id}</Text>
               {props.year && <Text flex={1}>({props.year})</Text>}
+              <Text>Reqs: {props.requirements?.length}</Text>
             </HStack>
           </VStack>
           <NextLink href={'/add-certification?cert=' + props.address} passHref>

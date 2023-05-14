@@ -11,11 +11,11 @@ const Home: NextPage = () => {
   return (
     <div className={styles.App}>
       <Head>
-        <title>Vanward</title>
+        <title>Vanward - Certifications</title>
       </Head>
       <AppBar />
       <Box>
-        <Heading as='h1' size='l' ml={4} mt={8}>
+        <Heading as='h1' size='xl' ml={8} mt={8}>
           Certifications
         </Heading>
         {publicKey ? <CertificationList /> : null}

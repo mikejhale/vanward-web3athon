@@ -43,7 +43,7 @@ pub mod vanward {
 #[derive(Accounts)]
 #[instruction(id: String, year: u16)]
 pub struct AddCertification<'info> {
-    #[account(init, payer = user, space = 256, seeds = [
+    #[account(init, payer = user, space = 8 + 32 + 96 + 2 + 480 + 2, seeds = [
         b"certification",
         id.as_bytes(),
         year.to_le_bytes().as_ref(),
@@ -58,7 +58,7 @@ pub struct AddCertification<'info> {
 #[derive(Accounts)]
 #[instruction(module: String)]
 pub struct AddRequirement<'info> {
-    #[account(init, payer = user, space = 256, seeds = [
+    #[account(init, payer = user, space = 8 + 32 + 32 + 480 + 2 + 2, seeds = [
         b"requirement",
         module.as_bytes(),
         user.to_account_info().key.as_ref(),

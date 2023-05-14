@@ -8,10 +8,9 @@ import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';
 import useMemcmp from '../hooks/useMemcmp';
 import { CertificationCard } from './CertificationCard';
-import { CertificationType } from '../types/certifications';
 
-export const CertificationList: FC = () => {
-  const [certifications, setCertifications] = useState<CertificationType[]>([]);
+export const CertificationRequirementsList: FC = () => {
+  const [certifications, setCertifications] = useState<ProgramAccount[]>([]);
   const { connection } = useConnection();
   const wallet = useWallet();
   const provider = useAnchorProvider(connection, wallet);
@@ -19,19 +18,11 @@ export const CertificationList: FC = () => {
   const certFilter = useMemcmp(8, provider.wallet.publicKey.toBase58());
 
   useEffect(() => {
-    console.log('get certifications');
-    let certsWithReqs: CertificationType[] = [];
+    console.log('getting certifications...');
+    program.account.certification.all(certFilter).then((certs) => {
+      setCertifications(certs);
 
-    const getCerts = async () => {
-      return await program.account.certification.all(certFilter);
-    };
-
-    const getReqs = async () => {
-      const certs = await getCerts();
-
-      for (const c of certs) {
-        let cr: CertificationType = { certification: c };
-
+      certs.forEach((c) => {
         const reqFilter = [
           {
             memcmp: {
@@ -41,21 +32,16 @@ export const CertificationList: FC = () => {
           },
         ];
 
-        cr.requirements = await program.account.requirement.all(reqFilter);
-
-        certsWithReqs.push(cr);
-      }
-      setCertifications(certsWithReqs);
-    };
-
-    getReqs();
+        program.account.requirement.all(reqFilter).then((reqs) => {
+          console.log(reqs);
+        });
+      });
+    });
   }, []);
 
   const handleAddNewCertification = () => {
     console.log('add new certification');
   };
-
-  console.log('cwr', certifications);
 
   return (
     <Box p={12}>
@@ -67,11 +53,11 @@ export const CertificationList: FC = () => {
       {certifications.length > 0 ? (
         certifications.map((c) => (
           <CertificationCard
-            key={c.certification.account.id}
-            id={c.certification.account.id}
-            year={c.certification.account.year}
-            title={c.certification.account.title}
-            address={c.certification.publicKey.toString()}
+            key={c.account.id}
+            id={c.account.id}
+            year={c.account.year}
+            title={c.account.title}
+            address={c.publicKey.toString()}
             requirements={c.requirements}
           />
         ))
