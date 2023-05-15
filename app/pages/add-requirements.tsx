@@ -14,7 +14,7 @@ const AddRequirements: NextPage = () => {
       <AppBar />
       <Box>
         <Heading as='h1' size='xl' ml={8} mt={8}>
-          Manage Requirements
+          Add Requirement
         </Heading>
         <Box p={12}>
           <RequirementForm />

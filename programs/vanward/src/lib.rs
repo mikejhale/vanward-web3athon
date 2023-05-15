@@ -80,16 +80,17 @@ pub struct AddRequirement<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(id: String)]
 pub struct AddProfessional<'info> {
-    #[account(init, payer = user, space = 8 + 32 + 32 + 128 + 1 + 1, seeds = [
+    #[account(init, payer = user, space = 8 + 44 + 128 + 1, seeds = [
         b"professional",
-        id.as_bytes(),
+        owner.to_account_info().key.as_ref(),
         user.to_account_info().key.as_ref(),
     ], bump)]
     pub professional: Account<'info, Professional>,
     #[account(mut)]
     pub user: Signer<'info>,
+    /// CHECK: Needed for the seed for the Professional PDA
+    pub owner: AccountInfo<'info>,
     pub system_program: Program<'info, System>,
 }
 
@@ -114,6 +115,7 @@ pub struct Requirement {
 #[account]
 pub struct Professional {
     pub authority: Pubkey,
+    pub owner: Pubkey,
     pub id: String,
     pub bump: u8,
 }

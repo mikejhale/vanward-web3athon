@@ -7,9 +7,10 @@ import {
   setProvider,
   workspace,
 } from '@coral-xyz/anchor';
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey, Keypair } from '@solana/web3.js';
 import { expect } from 'chai';
 import { Vanward } from '../target/types/vanward';
+const crypto = require('crypto');
 
 describe('vanward', async () => {
   const certificationId = 'CERT' + (Math.floor(Math.random() * 90000) + 10000);
@@ -34,7 +35,6 @@ describe('vanward', async () => {
 
   const module = 'Week 1';
   const credits = 1;
-
   /*
   const [requirementPda, reqBump] = await web3.PublicKey.findProgramAddressSync(
     [
@@ -97,8 +97,6 @@ describe('vanward', async () => {
     expect(reqAccount.credits).equals(credits);
   });
 
-  */
-
   it('can get certification requirements', async () => {
     const certificationPda = new PublicKey(
       'FZqavH54MmEnKqupDzUJNJM7yMoq7vKqKAEAz31vLXUo'
@@ -116,5 +114,63 @@ describe('vanward', async () => {
     console.log(reqAccounts);
 
     expect(reqAccounts[0].account.module).equals(certificationId);
+  });
+  */
+
+  /*
+  it('can add a professional by ID', async () => {
+    //const userKeypair = Keypair.generate();
+    const userId = 'user' + (Math.floor(Math.random() * 90000) + 10000);
+
+    const [professionalPda, proBump] =
+      await web3.PublicKey.findProgramAddressSync(
+        [
+          utils.bytes.utf8.encode('professional'),
+          utils.bytes.utf8.encode(userId),
+          //userKeypair.publicKey.toBuffer(),
+          provider.wallet.publicKey.toBuffer(),
+        ],
+        program.programId
+      );
+
+    const tx = await program.methods
+      .addProfessional(userId, proBump)
+      .accounts({
+        professional: professionalPda,
+        user: provider.wallet.publicKey,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
+
+    let proAccount = await program.account.professional.fetch(professionalPda);
+    expect(proAccount.id).equals(userId);
+  });
+*/
+
+  it('can add a professional by Address', async () => {
+    const userKeypair = Keypair.generate();
+
+    const [professionalPda, proBump] =
+      await web3.PublicKey.findProgramAddressSync(
+        [
+          utils.bytes.utf8.encode('professional'),
+          userKeypair.publicKey.toBuffer(),
+          provider.wallet.publicKey.toBuffer(),
+        ],
+        program.programId
+      );
+
+    const tx = await program.methods
+      .addProfessional(userKeypair.publicKey.toString(), proBump)
+      .accounts({
+        professional: professionalPda,
+        user: provider.wallet.publicKey,
+        owner: userKeypair.publicKey,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc();
+
+    let proAccount = await program.account.professional.fetch(professionalPda);
+    expect(proAccount.id).equals(userKeypair.publicKey.toString());
   });
 });

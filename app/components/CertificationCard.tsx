@@ -4,18 +4,18 @@ import {
   VStack,
   HStack,
   Text,
-  Button,
+  Divider,
   Icon,
   IconButton,
   Card,
   CardBody,
-  CardHeader,
+  CardFooter,
   Heading,
   propNames,
 } from '@chakra-ui/react';
 import { ProgramAccount } from '@coral-xyz/anchor';
 import NextLink from 'next/link';
-import { RiEdit2Line, RiListSettingsFill } from 'react-icons/ri';
+import { RiEdit2Line, RiPlayListAddLine } from 'react-icons/ri';
 
 type CertCardProps = {
   id: string;
@@ -26,15 +26,8 @@ type CertCardProps = {
 };
 
 export const CertificationCard = (props: CertCardProps) => {
-  console.log('cardProps', props);
   return (
-    <Card
-      direction={{ base: 'row', sm: 'row' }}
-      overflow='hidden'
-      variant='outline'
-      maxW={640}
-      mb={4}
-    >
+    <Card variant='outline' maxW={640} mb={4}>
       <CardBody>
         <Flex>
           <VStack flex='1' align='flex-start'>
@@ -49,6 +42,7 @@ export const CertificationCard = (props: CertCardProps) => {
           </VStack>
           <NextLink href={'/add-certification?cert=' + props.address} passHref>
             <IconButton
+              hidden={true}
               variant='outline'
               title='Edit'
               icon={<RiEdit2Line />}
@@ -61,16 +55,30 @@ export const CertificationCard = (props: CertCardProps) => {
           <NextLink href={'/add-requirements?cert=' + props.address} passHref>
             <IconButton
               variant='outline'
-              icon={<RiListSettingsFill />}
+              icon={<RiPlayListAddLine />}
               size='lg'
-              aria-label='Manage Requirements'
-              title='Manage Requirements'
+              aria-label='Add Requirement'
+              title='Add Requirement'
               mr={4}
               colorScheme='orange'
             />
           </NextLink>
         </Flex>
       </CardBody>
+      <Divider />
+      <CardFooter>
+        <VStack align='flex-start'>
+          <Heading as='h3' size='sm' mb={2}>
+            Requirements
+          </Heading>
+          {props.requirements?.map((r) => (
+            <Text key={r.account.module}>
+              <strong>{r.account.module}</strong>: {r.account.credits} Credit
+              {r.account.credits > 1 ? 's' : ''}
+            </Text>
+          ))}
+        </VStack>
+      </CardFooter>
     </Card>
   );
 };

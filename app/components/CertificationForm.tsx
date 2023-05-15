@@ -53,11 +53,29 @@ export const CertificationForm: FC = () => {
 
   return (
     <>
-      <Box p={4} display={{ md: 'flex' }} margin={2}>
+      <Box
+        p={4}
+        display={{ md: 'flex' }}
+        bgColor='#fff'
+        borderRadius={14}
+        margin={2}
+      >
         <form onSubmit={handleAddCert}>
-          <FormControl isRequired>
-            <FormLabel>Certification ID</FormLabel>
+          <FormControl mb={6} isRequired>
+            <FormLabel>Title</FormLabel>
             <Input
+              width='600px'
+              id='certTitle'
+              value={certTitle}
+              maxLength={120}
+              onChange={(event) => setCertTitle(event.currentTarget.value)}
+            />
+          </FormControl>
+
+          <FormControl mb={6} isRequired>
+            <FormLabel>ID</FormLabel>
+            <Input
+              width='260px'
               id='certId'
               value={certId}
               maxLength={24}
@@ -65,10 +83,11 @@ export const CertificationForm: FC = () => {
             />
           </FormControl>
 
-          <FormControl isRequired>
-            <FormLabel>Certification Year</FormLabel>
+          <FormControl mb={6}>
+            <FormLabel>Year</FormLabel>
             <Input
               id='certYear'
+              width='80px'
               value={certYear}
               min={2023}
               max={2173}
@@ -77,17 +96,7 @@ export const CertificationForm: FC = () => {
             />
           </FormControl>
 
-          <FormControl isRequired>
-            <FormLabel>Certification Title</FormLabel>
-            <Input
-              id='certTitle'
-              value={certTitle}
-              maxLength={120}
-              onChange={(event) => setCertTitle(event.currentTarget.value)}
-            />
-          </FormControl>
-
-          <Button width='full' mt={4} type='submit'>
+          <Button width='200px' colorScheme='orange' mt={4} type='submit'>
             Add Certification
           </Button>
         </form>

@@ -55,9 +55,9 @@ export const RequirementForm: FC = () => {
 
   return (
     <>
-      <Box p={4} display={{ md: 'flex' }} margin={2}>
+      <Box p={4} display={{ md: 'flex' }} bgColor='#fff' margin={2}>
         <form onSubmit={handleAddReq}>
-          <FormControl isRequired>
+          <FormControl mb={6} isRequired>
             <FormLabel>Module</FormLabel>
             <Input
               id='module'
@@ -67,7 +67,7 @@ export const RequirementForm: FC = () => {
             />
           </FormControl>
 
-          <FormControl isRequired>
+          <FormControl mb={6} isRequired>
             <FormLabel>Credits</FormLabel>
             <Input
               id='credits'
@@ -80,7 +80,7 @@ export const RequirementForm: FC = () => {
               }
             />
           </FormControl>
-          <Button width='full' mt={4} type='submit'>
+          <Button width='full' colorScheme='orange' mt={4} type='submit'>
             Add Requirement
           </Button>
         </form>
