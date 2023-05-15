@@ -38,12 +38,21 @@ pub mod vanward {
         req.bump = bump;
         Ok(())
     }
+
+    // add professional
+    pub fn add_professional(ctx: Context<AddProfessional>, id: String, bump: u8) -> Result<()> {
+        let pro = &mut ctx.accounts.professional;
+        pro.authority = *ctx.accounts.user.key;
+        pro.id = id;
+        pro.bump = bump;
+        Ok(())
+    }
 }
 
 #[derive(Accounts)]
 #[instruction(id: String, year: u16)]
 pub struct AddCertification<'info> {
-    #[account(init, payer = user, space = 8 + 32 + 96 + 2 + 480 + 2, seeds = [
+    #[account(init, payer = user, space = 8 + 32 + 96 + 2 + 480 + 1, seeds = [
         b"certification",
         id.as_bytes(),
         year.to_le_bytes().as_ref(),
@@ -58,13 +67,27 @@ pub struct AddCertification<'info> {
 #[derive(Accounts)]
 #[instruction(module: String)]
 pub struct AddRequirement<'info> {
-    #[account(init, payer = user, space = 8 + 32 + 32 + 480 + 2 + 2, seeds = [
+    #[account(init, payer = user, space = 8 + 32 + 32 + 480 + 1 + 1, seeds = [
         b"requirement",
         module.as_bytes(),
         user.to_account_info().key.as_ref(),
     ], bump)]
     pub requirement: Account<'info, Requirement>,
     pub certification: Account<'info, Certification>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+#[instruction(id: String)]
+pub struct AddProfessional<'info> {
+    #[account(init, payer = user, space = 8 + 32 + 32 + 128 + 1 + 1, seeds = [
+        b"professional",
+        id.as_bytes(),
+        user.to_account_info().key.as_ref(),
+    ], bump)]
+    pub professional: Account<'info, Professional>,
     #[account(mut)]
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -85,5 +108,12 @@ pub struct Requirement {
     pub authority: Pubkey,
     pub module: String,
     pub credits: u8,
+    pub bump: u8,
+}
+
+#[account]
+pub struct Professional {
+    pub authority: Pubkey,
+    pub id: String,
     pub bump: u8,
 }
