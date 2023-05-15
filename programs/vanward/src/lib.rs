@@ -52,6 +52,7 @@ pub mod vanward {
     pub fn enroll(ctx: Context<Enroll>, bump: u8) -> Result<()> {
         let enrollment = &mut ctx.accounts.enrollment;
         enrollment.authority = ctx.accounts.certification.authority;
+        enrollment.certification = ctx.accounts.certification.to_account_info().key();
         enrollment.owner = *ctx.accounts.user.key;
         enrollment.bump = bump;
         Ok(())
@@ -105,7 +106,7 @@ pub struct AddProfessional<'info> {
 
 #[derive(Accounts)]
 pub struct Enroll<'info> {
-    #[account(init, payer = user, space = 8 + 32 + 32 + 1, seeds = [
+    #[account(init, payer = user, space = 8 + 32 + 32 + 32 + 1, seeds = [
         b"enroll",
         user.to_account_info().key.as_ref(),
         certification.to_account_info().key.as_ref(),
@@ -147,5 +148,6 @@ pub struct Professional {
 pub struct Enrollment {
     pub authority: Pubkey,
     pub owner: Pubkey,
+    pub certification: Pubkey,
     pub bump: u8,
 }
