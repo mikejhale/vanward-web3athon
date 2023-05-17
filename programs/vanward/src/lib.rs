@@ -12,14 +12,13 @@ pub mod vanward {
         id: String,
         year: u16,
         title: String,
-        bump: u8,
     ) -> Result<()> {
         let cert = &mut ctx.accounts.certification;
         cert.authority = *ctx.accounts.user.key;
         cert.id = id;
         cert.year = year;
         cert.title = title;
-        cert.bump = bump;
+        cert.bump = *ctx.bumps.get("certification").unwrap();
         Ok(())
     }
 
@@ -28,33 +27,32 @@ pub mod vanward {
         ctx: Context<AddRequirement>,
         module: String,
         credits: u8,
-        bump: u8,
     ) -> Result<()> {
         let req: &mut Account<Requirement> = &mut ctx.accounts.requirement;
         req.authority = *ctx.accounts.user.key;
         req.owner = *ctx.accounts.certification.to_account_info().key;
         req.module = module;
         req.credits = credits;
-        req.bump = bump;
+        req.bump = *ctx.bumps.get("requirement").unwrap();
         Ok(())
     }
 
     // add professional
-    pub fn add_professional(ctx: Context<AddProfessional>, id: String, bump: u8) -> Result<()> {
+    pub fn add_professional(ctx: Context<AddProfessional>, id: String) -> Result<()> {
         let pro = &mut ctx.accounts.professional;
         pro.authority = *ctx.accounts.user.key;
         pro.id = id;
-        pro.bump = bump;
+        pro.bump = *ctx.bumps.get("professional").unwrap();
         Ok(())
     }
 
     // enroll in certification as a professiona;
-    pub fn enroll(ctx: Context<Enroll>, bump: u8) -> Result<()> {
+    pub fn enroll(ctx: Context<Enroll>) -> Result<()> {
         let enrollment = &mut ctx.accounts.enrollment;
         enrollment.authority = ctx.accounts.certification.authority;
         enrollment.certification = ctx.accounts.certification.to_account_info().key();
         enrollment.owner = *ctx.accounts.user.key;
-        enrollment.bump = bump;
+        enrollment.bump = *ctx.bumps.get("enrollment").unwrap();
         Ok(())
     }
 }
