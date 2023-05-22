@@ -8,16 +8,14 @@ import NextLink from 'next/link';
 import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';
 import useMemcmp from '../hooks/useMemcmp';
-import { CertificationCard } from './CertificationCard';
-import { CertificationType } from '../types/certifications';
-import { createSecretKey } from 'crypto';
+import { EnrolleeCard } from './EnrolleeCard';
 
 type EnrolleeListProps = {
   certification: string;
 };
 
 export const EnrolleeList = (props: EnrolleeListProps) => {
-  const [enrollees, setEnrollees] = useState<Enrollee[]>([]);
+  const [enrollees, setEnrollees] = useState<ProgramAccount[]>([]);
   const { connection } = useConnection();
   const wallet = useWallet();
   const provider = useAnchorProvider(connection, wallet);
@@ -39,12 +37,16 @@ export const EnrolleeList = (props: EnrolleeListProps) => {
     <Box p={12}>
       {enrollees.length > 0 ? (
         enrollees.map((c) => (
-          <Text key={c.account.owner.toString()}>
-            {c.account.owner.toString()}
-          </Text>
+          <EnrolleeCard
+            key={c.account.owner.toString()}
+            enrollee={c.account.owner.toString()}
+            certification={c.account.certification.toString()}
+          />
         ))
       ) : (
-        <Text fontSize={18}>You haven&apos;t added any Certifications yet</Text>
+        <Text fontSize={18}>
+          There are no enrollees to this Certification yet
+        </Text>
       )}
     </Box>
   );
