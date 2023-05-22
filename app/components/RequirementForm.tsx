@@ -40,7 +40,7 @@ export const RequirementForm: FC = () => {
     );
 
     const tx = await program.methods
-      .addRequirement(reqModule, reqCredits, reqBump)
+      .addRequirement(reqModule, reqCredits)
       .accounts({
         requirement: requirementPda,
         certification: new PublicKey(certificationAddress),

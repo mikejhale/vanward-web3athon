@@ -5,8 +5,9 @@ export const Nav = () => {
   return (
     <HStack fontSize={24}>
       <Link href='/'>Home</Link>
-      <Link href='/add-certification'>Certifications</Link>
-      <Link href='/add-requirements'>Requirements</Link>
+      <Link href='/add-certification'>Certs</Link>
+      <Link href='/add-requirements'>Reqs</Link>
+      <Link href='/enroll'>Enroll</Link>
     </HStack>
   );
 };

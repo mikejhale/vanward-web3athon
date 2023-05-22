@@ -1,25 +1,26 @@
 use anchor_lang::prelude::*;
 
-declare_id!("AKUscwsW639dX2X8YRSes9mqx221HU1ti9ZDGdX6iVYV");
+pub mod certification;
+pub mod enrollment;
+pub mod requirement;
+
+use certification::*;
+use enrollment::*;
+use requirement::*;
+
+declare_id!("Hh89oGmpZ15RCsDgueaAAcSNG9WVuy79HzYdcgLUp1d3");
 
 #[program]
 pub mod vanward {
     use super::*;
 
-    // add certification
     pub fn add_certification(
         ctx: Context<AddCertification>,
         id: String,
         year: u16,
         title: String,
     ) -> Result<()> {
-        let cert = &mut ctx.accounts.certification;
-        cert.authority = *ctx.accounts.user.key;
-        cert.id = id;
-        cert.year = year;
-        cert.title = title;
-        cert.bump = *ctx.bumps.get("certification").unwrap();
-        Ok(())
+        certification::add_certification(ctx, id, year, title)
     }
 
     // add requirement
@@ -28,16 +29,16 @@ pub mod vanward {
         module: String,
         credits: u8,
     ) -> Result<()> {
-        let req: &mut Account<Requirement> = &mut ctx.accounts.requirement;
-        req.authority = *ctx.accounts.user.key;
-        req.owner = *ctx.accounts.certification.to_account_info().key;
-        req.module = module;
-        req.credits = credits;
-        req.bump = *ctx.bumps.get("requirement").unwrap();
-        Ok(())
+        requirement::add_requirement(ctx, module, credits)
+    }
+
+    // enroll in certification as a professional
+    pub fn enroll(ctx: Context<Enroll>) -> Result<()> {
+        enrollment::enroll(ctx)
     }
 
     // add professional
+    /*
     pub fn add_professional(ctx: Context<AddProfessional>, id: String) -> Result<()> {
         let pro = &mut ctx.accounts.professional;
         pro.authority = *ctx.accounts.user.key;
@@ -45,51 +46,13 @@ pub mod vanward {
         pro.bump = *ctx.bumps.get("professional").unwrap();
         Ok(())
     }
-
-    // enroll in certification as a professiona;
-    pub fn enroll(ctx: Context<Enroll>) -> Result<()> {
-        let enrollment = &mut ctx.accounts.enrollment;
-        enrollment.authority = ctx.accounts.certification.authority;
-        enrollment.certification = ctx.accounts.certification.to_account_info().key();
-        enrollment.owner = *ctx.accounts.user.key;
-        enrollment.bump = *ctx.bumps.get("enrollment").unwrap();
-        Ok(())
-    }
+    */
 }
 
-#[derive(Accounts)]
-#[instruction(id: String, year: u16)]
-pub struct AddCertification<'info> {
-    #[account(init, payer = user, space = 8 + 32 + 96 + 2 + 480 + 1, seeds = [
-        b"certification",
-        id.as_bytes(),
-        year.to_le_bytes().as_ref(),
-        user.to_account_info().key.as_ref(),
-    ], bump)]
-    pub certification: Account<'info, Certification>,
-    #[account(mut)]
-    pub user: Signer<'info>,
-    pub system_program: Program<'info, System>,
-}
-
-#[derive(Accounts)]
-#[instruction(module: String)]
-pub struct AddRequirement<'info> {
-    #[account(init, payer = user, space = 8 + 32 + 32 + 480 + 1 + 1, seeds = [
-        b"requirement",
-        module.as_bytes(),
-        user.to_account_info().key.as_ref(),
-    ], bump)]
-    pub requirement: Account<'info, Requirement>,
-    pub certification: Account<'info, Certification>,
-    #[account(mut)]
-    pub user: Signer<'info>,
-    pub system_program: Program<'info, System>,
-}
-
+/*
 #[derive(Accounts)]
 pub struct AddProfessional<'info> {
-    #[account(init, payer = user, space = 8 + 44 + 128 + 1, seeds = [
+    #[account(init, payer = user, space = 8 + Professional::INIT_SPACE, seeds = [
         b"professional",
         owner.to_account_info().key.as_ref(),
         user.to_account_info().key.as_ref(),
@@ -98,54 +61,17 @@ pub struct AddProfessional<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
     /// CHECK: Needed for the seed for the Professional PDA
-    pub owner: AccountInfo<'info>,
-    pub system_program: Program<'info, System>,
-}
-
-#[derive(Accounts)]
-pub struct Enroll<'info> {
-    #[account(init, payer = user, space = 8 + 32 + 32 + 32 + 1, seeds = [
-        b"enroll",
-        user.to_account_info().key.as_ref(),
-        certification.to_account_info().key.as_ref(),
-    ], bump)]
-    pub enrollment: Account<'info, Enrollment>,
-    #[account(mut)]
-    pub user: Signer<'info>,
-    pub certification: Account<'info, Certification>,
+    pub owner: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
 }
 
 #[account]
-pub struct Certification {
-    pub authority: Pubkey,
-    pub id: String,
-    pub year: u16,
-    pub title: String,
-    pub bump: u8,
-}
-
-#[account]
-pub struct Requirement {
-    pub owner: Pubkey,
-    pub authority: Pubkey,
-    pub module: String,
-    pub credits: u8,
-    pub bump: u8,
-}
-
-#[account]
+#[derive(InitSpace)]
 pub struct Professional {
     pub authority: Pubkey,
     pub owner: Pubkey,
+    #[max_len(128)]
     pub id: String,
     pub bump: u8,
 }
-
-#[account]
-pub struct Enrollment {
-    pub authority: Pubkey,
-    pub owner: Pubkey,
-    pub certification: Pubkey,
-    pub bump: u8,
-}
+*/

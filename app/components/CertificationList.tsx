@@ -19,7 +19,6 @@ export const CertificationList: FC = () => {
   const certFilter = useMemcmp(8, provider.wallet.publicKey.toBase58());
 
   useEffect(() => {
-    console.log('get certifications');
     let certsWithReqs: CertificationType[] = [];
 
     const getCerts = async () => {
@@ -50,12 +49,6 @@ export const CertificationList: FC = () => {
 
     getReqs();
   }, []);
-
-  const handleAddNewCertification = () => {
-    console.log('add new certification');
-  };
-
-  console.log('cwr', certifications);
 
   return (
     <Box p={12}>

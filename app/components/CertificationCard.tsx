@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { ProgramAccount } from '@coral-xyz/anchor';
 import NextLink from 'next/link';
-import { RiEdit2Line, RiPlayListAddLine } from 'react-icons/ri';
+import { RiEdit2Line, RiPlayListAddLine, RiTeamLine } from 'react-icons/ri';
 
 type CertCardProps = {
   id: string;
@@ -59,6 +59,17 @@ export const CertificationCard = (props: CertCardProps) => {
               size='lg'
               aria-label='Add Requirement'
               title='Add Requirement'
+              mr={4}
+              colorScheme='orange'
+            />
+          </NextLink>
+          <NextLink href={'/enrollees?cert=' + props.address} passHref>
+            <IconButton
+              variant='outline'
+              icon={<RiTeamLine />}
+              size='lg'
+              aria-label='Enrollees'
+              title='Enrollees'
               mr={4}
               colorScheme='orange'
             />

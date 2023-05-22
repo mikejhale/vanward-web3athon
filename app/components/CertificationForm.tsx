@@ -39,7 +39,7 @@ export const CertificationForm: FC = () => {
     );
 
     const tx = await program.methods
-      .addCertification(certId, certYear, certTitle, certBump)
+      .addCertification(certId, certYear, certTitle)
       .accounts({
         certification: certificationPda,
         user: provider.wallet.publicKey,

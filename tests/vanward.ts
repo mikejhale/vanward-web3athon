@@ -36,23 +36,9 @@ describe('vanward', async () => {
   const module = 'Week 1';
   const credits = 1;
 
-  const [requirementPda, reqBump] = await web3.PublicKey.findProgramAddressSync(
-    [
-      utils.bytes.utf8.encode('requirement'),
-      utils.bytes.utf8.encode(module),
-      provider.wallet.publicKey.toBuffer(),
-    ],
-    program.programId
-  );
-
   it('can add a certification', async () => {
     const tx = await program.methods
-      .addCertification(
-        certificationId,
-        certificationYear,
-        certificationTitle,
-        certBump
-      )
+      .addCertification(certificationId, certificationYear, certificationTitle)
       .accounts({
         certification: certificationPda,
         user: provider.wallet.publicKey,
@@ -63,18 +49,17 @@ describe('vanward', async () => {
     let certAccount = await program.account.certification.fetch(
       certificationPda
     );
+
     expect(certAccount.id).equals(certificationId);
     expect(certAccount.year).equals(certificationYear);
     expect(certAccount.title).equals(certificationTitle);
   });
-
   /*
-
   it('can add a requirement', async () => {
     const module = 'Week 1';
     const credits = 1;
 
-    const [requirementPda, reqBump] =
+    const [requirementPda, reqPda] =
       await web3.PublicKey.findProgramAddressSync(
         [
           utils.bytes.utf8.encode('requirement'),
@@ -85,7 +70,7 @@ describe('vanward', async () => {
       );
 
     const tx = await program.methods
-      .addRequirement(certificationId, credits, reqBump)
+      .addRequirement(certificationId, credits)
       .accounts({
         requirement: requirementPda,
         certification: certificationPda,
@@ -94,16 +79,14 @@ describe('vanward', async () => {
       })
       .rpc();
 
-    let reqAccount = await program.account.requirement.fetch(requirementPda);
+    let reqAccount = await program.account.requirement.fetch(
+      requirementPda.toString()
+    );
     expect(reqAccount.module).equals(certificationId);
     expect(reqAccount.credits).equals(credits);
   });
 
   it('can get certification requirements', async () => {
-    const certificationPda = new PublicKey(
-      'FZqavH54MmEnKqupDzUJNJM7yMoq7vKqKAEAz31vLXUo'
-    );
-
     let reqAccounts = await program.account.requirement.all([
       {
         memcmp: {
@@ -112,47 +95,43 @@ describe('vanward', async () => {
         },
       },
     ]);
-
-    console.log(reqAccounts);
-
     expect(reqAccounts[0].account.module).equals(certificationId);
   });
-  */
 
-  /*
-  it('can add a professional by ID', async () => {
-    //const userKeypair = Keypair.generate();
-    const userId = 'user' + (Math.floor(Math.random() * 90000) + 10000);
-
-    const [professionalPda, proBump] =
+  it('can add an enrollment', async () => {
+    const [enrollmentPda, enrollBump] =
       await web3.PublicKey.findProgramAddressSync(
         [
-          utils.bytes.utf8.encode('professional'),
-          utils.bytes.utf8.encode(userId),
-          //userKeypair.publicKey.toBuffer(),
+          utils.bytes.utf8.encode('enroll'),
           provider.wallet.publicKey.toBuffer(),
+          certificationPda.toBuffer(),
         ],
         program.programId
       );
 
     const tx = await program.methods
-      .addProfessional(userId, proBump)
+      .enroll()
       .accounts({
-        professional: professionalPda,
+        enrollment: enrollmentPda,
         user: provider.wallet.publicKey,
+        certification: certificationPda,
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
 
-    let proAccount = await program.account.professional.fetch(professionalPda);
-    expect(proAccount.id).equals(userId);
+    let enrollAccount = await program.account.enrollment.fetch(
+      enrollmentPda.toString()
+    );
+    expect(enrollAccount.certification.toString()).equals(
+      certificationPda.toString()
+    );
   });
 
 
   it('can add a professional by Address', async () => {
     const userKeypair = Keypair.generate();
 
-    const [professionalPda, proBump] =
+    const professionalPda, proBump =
       await web3.PublicKey.findProgramAddressSync(
         [
           utils.bytes.utf8.encode('professional'),
@@ -177,29 +156,4 @@ describe('vanward', async () => {
   });
 
   */
-
-  it('can add an enrollment', async () => {
-    const [enrollmentPda, enrollBump] =
-      await web3.PublicKey.findProgramAddressSync(
-        [
-          utils.bytes.utf8.encode('enroll'),
-          provider.wallet.publicKey.toBuffer(),
-          certificationPda.toBuffer(),
-        ],
-        program.programId
-      );
-
-    const tx = await program.methods
-      .enroll(enrollBump)
-      .accounts({
-        enrollment: enrollmentPda,
-        user: provider.wallet.publicKey,
-        certification: certificationPda,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .rpc();
-
-    let enrollAccount = await program.account.enrollment.fetch(enrollmentPda);
-    expect(enrollAccount.bump).equals(enrollBump);
-  });
 });

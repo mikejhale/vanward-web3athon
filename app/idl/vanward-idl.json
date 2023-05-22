@@ -33,10 +33,6 @@
         {
           "name": "title",
           "type": "string"
-        },
-        {
-          "name": "bump",
-          "type": "u8"
         }
       ]
     },
@@ -72,12 +68,65 @@
         {
           "name": "credits",
           "type": "u8"
-        },
-        {
-          "name": "bump",
-          "type": "u8"
         }
       ]
+    },
+    {
+      "name": "addProfessional",
+      "accounts": [
+        {
+          "name": "professional",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "enroll",
+      "accounts": [
+        {
+          "name": "enrollment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "certification",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -136,9 +185,58 @@
           }
         ]
       }
+    },
+    {
+      "name": "Professional",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Enrollment",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "certification",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
     }
   ],
+
   "metadata": {
-    "address": "AKUscwsW639dX2X8YRSes9mqx221HU1ti9ZDGdX6iVYV"
+    "address": "Hh89oGmpZ15RCsDgueaAAcSNG9WVuy79HzYdcgLUp1d3"
   }
 }
