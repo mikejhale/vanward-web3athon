@@ -1,13 +1,6 @@
 import { FC } from 'react';
-import { useState, useEffect } from 'react';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Text,
-} from '@chakra-ui/react';
+import { useState } from 'react';
+import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { web3, utils, BN } from '@coral-xyz/anchor';
 import { PublicKey } from '@solana/web3.js';

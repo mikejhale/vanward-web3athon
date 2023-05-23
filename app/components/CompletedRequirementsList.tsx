@@ -1,35 +1,12 @@
-import {
-  Box,
-  Flex,
-  VStack,
-  HStack,
-  Text,
-  Divider,
-  Icon,
-  Button,
-  IconButton,
-  Card,
-  CardBody,
-  CardFooter,
-  Heading,
-  propNames,
-} from '@chakra-ui/react';
+import { Flex, HStack, Text, Icon, Button } from '@chakra-ui/react';
 import { ProgramAccount, web3, utils, BN } from '@coral-xyz/anchor';
-import NextLink from 'next/link';
-import { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { PublicKey } from '@solana/web3.js';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import {
-  RiCheckboxBlankLine,
-  RiCheckboxCircleLine,
-  RiCheckLine,
-} from 'react-icons/ri';
+import { RiCheckboxCircleLine, RiCheckLine } from 'react-icons/ri';
 import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';
 import useMemcmp from '../hooks/useMemcmp';
-import { CertificationCard } from './CertificationCard';
-import { CertificationType } from '../types/certifications';
 
 type EnrolleeProps = {
   enrollee: string;
@@ -131,10 +108,9 @@ export const CompletedRequirementsList = (props: EnrolleeProps) => {
         >
           <HStack flexGrow='1'>
             <Text fontSize={'lg'}>{r.requirement.account.module}</Text>
-            <Icon
-              color='red'
-              as={r.completed ? RiCheckboxCircleLine : RiCheckboxBlankLine}
-            />
+            {r.completed ? (
+              <Icon boxSize={6} color='orange.600' as={RiCheckboxCircleLine} />
+            ) : null}
           </HStack>
           {!r.completed ? (
             <Button

@@ -1,21 +1,12 @@
 import {
-  Box,
   Flex,
   VStack,
-  HStack,
-  Text,
   Divider,
-  Icon,
-  IconButton,
   Card,
   CardBody,
   CardFooter,
   Heading,
-  propNames,
 } from '@chakra-ui/react';
-import { ProgramAccount } from '@coral-xyz/anchor';
-import NextLink from 'next/link';
-import { RiEdit2Line, RiPlayListAddLine, RiTeamLine } from 'react-icons/ri';
 import { CompletedRequirementsList } from './CompletedRequirementsList';
 
 type EnrolleeProps = {

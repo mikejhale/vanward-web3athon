@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { Box, Text, Button } from '@chakra-ui/react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { ProgramAccount } from '@coral-xyz/anchor';
 import NextLink from 'next/link';
 import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';

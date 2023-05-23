@@ -7,6 +7,7 @@ import { utils } from '@coral-xyz/anchor';
 import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';
 import { Certification } from '../types/certifications';
+import { useRouter } from 'next/router';
 
 export const CertificationEnrollment: FC = () => {
   const [certification, setCertification] = useState<Certification>({});
@@ -14,10 +15,9 @@ export const CertificationEnrollment: FC = () => {
   const wallet = useWallet();
   const provider = useAnchorProvider(connection, wallet);
   const program = useAnchorProgram(provider);
+  const router = useRouter();
 
-  const certificationAddress = new PublicKey(
-    'Hrzx3iPMHuteyyRE9uzoYCHMYmkEvNAe4a8Z3spACQak'
-  );
+  const certificationAddress = new PublicKey(router.query.cert as string);
 
   useEffect(() => {
     const getCert = async () => {

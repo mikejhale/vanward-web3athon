@@ -1,17 +1,15 @@
 import {
-  Box,
+  Link,
   Flex,
   VStack,
   HStack,
   Text,
   Divider,
-  Icon,
   IconButton,
   Card,
   CardBody,
   CardFooter,
   Heading,
-  propNames,
 } from '@chakra-ui/react';
 import { ProgramAccount } from '@coral-xyz/anchor';
 import NextLink from 'next/link';
@@ -37,7 +35,9 @@ export const CertificationCard = (props: CertCardProps) => {
             <HStack alignItems='flex-start'>
               <Text fontWeight={500}>{props.id}</Text>
               {props.year && <Text flex={1}>({props.year})</Text>}
-              <Text>Reqs: {props.requirements?.length}</Text>
+              <NextLink href={'/enroll?cert=' + props.address} passHref>
+                <Link color='orange.600'>Enroll</Link>
+              </NextLink>
             </HStack>
           </VStack>
           <NextLink href={'/add-certification?cert=' + props.address} passHref>
