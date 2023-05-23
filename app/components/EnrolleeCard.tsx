@@ -20,6 +20,7 @@ import { CompletedRequirementsList } from './CompletedRequirementsList';
 
 type EnrolleeProps = {
   enrollee: string;
+  enrollment: string;
   certification: string;
 };
 
@@ -36,13 +37,14 @@ export const EnrolleeCard = (props: EnrolleeProps) => {
         </Flex>
       </CardBody>
       <Divider />
-      <CardFooter>
-        <VStack align='flex-start'>
+      <CardFooter width='100%'>
+        <VStack align='flex-start' width='100%'>
           <Heading as='h3' size='sm' mb={2}>
             Completed Requirements:
           </Heading>
           <CompletedRequirementsList
             enrollee={props.enrollee}
+            enrollment={props.enrollment}
             certification={props.certification.toString()}
           />
         </VStack>

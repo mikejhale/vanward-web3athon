@@ -17,7 +17,7 @@ const AddRequirements: NextPage = () => {
   const program = useAnchorProgram(provider);
 
   const certificationAddress: string =
-    '6JVDjg5V9Di1EnVNBeFWTKwuLbD8d8Ffro3BLRvZEuby';
+    'Hrzx3iPMHuteyyRE9uzoYCHMYmkEvNAe4a8Z3spACQak';
 
   return (
     <div className={styles.App}>

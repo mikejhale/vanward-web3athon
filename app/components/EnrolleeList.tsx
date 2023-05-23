@@ -30,6 +30,8 @@ export const EnrolleeList = (props: EnrolleeListProps) => {
       return await program.account.enrollment.all(enrolleeFilter);
     };
 
+    console.log('enrollees', enrollees);
+
     getEnrollees().then((e) => setEnrollees(e));
   }, []);
 
@@ -40,6 +42,7 @@ export const EnrolleeList = (props: EnrolleeListProps) => {
           <EnrolleeCard
             key={c.account.owner.toString()}
             enrollee={c.account.owner.toString()}
+            enrollment={c.publicKey.toString()}
             certification={c.account.certification.toString()}
           />
         ))

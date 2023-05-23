@@ -16,7 +16,7 @@ export const CertificationEnrollment: FC = () => {
   const program = useAnchorProgram(provider);
 
   const certificationAddress = new PublicKey(
-    '59BrBEvT8SwRvEq3wnMYAkom29fss2MiFKjt6w3gqQ5R'
+    'Hrzx3iPMHuteyyRE9uzoYCHMYmkEvNAe4a8Z3spACQak'
   );
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export const CertificationEnrollment: FC = () => {
           {certification?.id}
         </Text>
         {certification?.year && (
-          <Text fontSize={18} mg={6}>
+          <Text fontSize={18} mb={6}>
             <Text as='span' fontWeight={500}>
               Year:
             </Text>{' '}

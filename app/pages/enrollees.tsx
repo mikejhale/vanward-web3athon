@@ -1,9 +1,6 @@
-import { useState, useEffect } from 'react';
 import { Box, Heading } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { web3, utils, BN, ProgramAccount } from '@coral-xyz/anchor';
-import { PublicKey } from '@solana/web3.js';
 import { AppBar } from '../components/AppBar';
 import { useRouter } from 'next/router';
 import { EnrolleeList } from '../components/EnrolleeList';
@@ -13,14 +10,11 @@ import useAnchorProvider from '../hooks/useAnchorProvider';
 import styles from '../styles/Home.module.css';
 
 const AddRequirements: NextPage = () => {
-  const [certification, setCertification] = useState<ProgramAccount>();
-  const { connection } = useConnection();
   const wallet = useWallet();
-  const provider = useAnchorProvider(connection, wallet);
-  const program = useAnchorProgram(provider);
   const router = useRouter();
   const certificationId = router.query.cert?.toString() as string;
 
+  /*
   useEffect(() => {
     const getCert = async () => {
       return await program.account.certification.fetch(certificationId);
@@ -28,6 +22,7 @@ const AddRequirements: NextPage = () => {
 
     const cert = getCert().then((cert) => setCertification(cert));
   }, []);
+*/
 
   return (
     <div className={styles.App}>
