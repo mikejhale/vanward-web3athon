@@ -17,15 +17,20 @@ export const CertificationEnrollment: FC = () => {
   const program = useAnchorProgram(provider);
   const router = useRouter();
 
-  const certificationAddress = new PublicKey(router.query.cert as string);
+  const certQuery: string = router.query.cert as string;
+  console.log(certQuery);
 
   useEffect(() => {
-    const getCert = async () => {
-      return await program.account.certification.fetch(certificationAddress);
-    };
+    if (certQuery) {
+      const getCert = async () => {
+        return await program.account.certification.fetch(
+          new PublicKey(certQuery)
+        );
+      };
 
-    const cert = getCert().then((cert) => setCertification(cert));
-  }, []);
+      const cert = getCert().then((cert) => setCertification(cert));
+    }
+  }, [certQuery]);
 
   const handleEnroll = async (event: any) => {
     console.log(
@@ -36,7 +41,7 @@ export const CertificationEnrollment: FC = () => {
       [
         utils.bytes.utf8.encode('enroll'),
         provider.wallet.publicKey.toBuffer(),
-        certificationAddress.toBuffer(),
+        new PublicKey(certQuery).toBuffer(),
       ],
       program.programId
     );
@@ -46,7 +51,7 @@ export const CertificationEnrollment: FC = () => {
       .accounts({
         enrollment: enrollmentPda,
         user: provider.wallet.publicKey,
-        certification: certificationAddress,
+        certification: new PublicKey(certQuery),
         systemProgram: SystemProgram.programId,
       })
       .rpc();
@@ -84,14 +89,18 @@ export const CertificationEnrollment: FC = () => {
             {certification?.year}
           </Text>
         )}
-        <Button
-          width='200px'
-          colorScheme='orange'
-          mt={4}
-          onClick={handleEnroll}
-        >
-          Enroll
-        </Button>
+        {certQuery ? (
+          <Button
+            width='200px'
+            colorScheme='orange'
+            mt={4}
+            onClick={handleEnroll}
+          >
+            Enroll
+          </Button>
+        ) : (
+          <Text>Missing Certification id</Text>
+        )}
       </Box>
     </>
   );
