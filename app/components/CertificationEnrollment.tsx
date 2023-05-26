@@ -6,7 +6,6 @@ import { PublicKey, SystemProgram } from '@solana/web3.js';
 import { utils } from '@coral-xyz/anchor';
 import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';
-import { Certification } from '../types/certifications';
 import { useRouter } from 'next/router';
 
 export const CertificationEnrollment: FC = () => {

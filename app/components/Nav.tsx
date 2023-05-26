@@ -5,7 +5,6 @@ export const Nav = () => {
   return (
     <HStack fontSize={24}>
       <Link href='/'>Certifications</Link>
-      <Link href='/enroll'>Enroll</Link>
     </HStack>
   );
 };

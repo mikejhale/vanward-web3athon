@@ -4,7 +4,6 @@ import { Box, Text, Button } from '@chakra-ui/react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { ProgramAccount } from '@coral-xyz/anchor';
 import { PublicKey } from '@solana/web3.js';
-import NextLink from 'next/link';
 import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';
 import useMemcmp from '../hooks/useMemcmp';

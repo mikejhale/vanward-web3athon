@@ -14,16 +14,6 @@ const AddRequirements: NextPage = () => {
   const router = useRouter();
   const certificationId = router.query.cert?.toString() as string;
 
-  /*
-  useEffect(() => {
-    const getCert = async () => {
-      return await program.account.certification.fetch(certificationId);
-    };
-
-    const cert = getCert().then((cert) => setCertification(cert));
-  }, []);
-*/
-
   return (
     <div className={styles.App}>
       <Head>

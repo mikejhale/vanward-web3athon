@@ -34,7 +34,7 @@ export const CertificationCard = (props: CertCardProps) => {
             </Heading>
             <HStack alignItems='flex-start'>
               <Text fontWeight={500}>{props.id}</Text>
-              {props.year && <Text flex={1}>({props.year})</Text>}
+              {props.year && <Text flex={1}>{props.year}</Text>}
               <NextLink href={'/enroll?cert=' + props.address} passHref>
                 <Link color='orange.600'>Enroll</Link>
               </NextLink>
