@@ -10,7 +10,7 @@ import { Certification } from '../types/certifications';
 import { useRouter } from 'next/router';
 
 export const CertificationEnrollment: FC = () => {
-  const [certification, setCertification] = useState<Certification>({});
+  const [certification, setCertification] = useState<any>({});
   const { connection } = useConnection();
   const wallet = useWallet();
   const provider = useAnchorProvider(connection, wallet);

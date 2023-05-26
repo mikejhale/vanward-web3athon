@@ -15,7 +15,6 @@ pub fn complete(ctx: Context<CompleteRequirement>) -> Result<()> {
 
 #[derive(Accounts)]
 pub struct CompleteRequirement<'info> {
-    //#[account(init, payer = user, space = 8 + Completion::INIT_SPACE, seeds = [
     #[account(init, payer = user, space = 8 + Completion::INIT_SPACE, seeds = [
             b"complete",
             owner.to_account_info().key.as_ref(),
