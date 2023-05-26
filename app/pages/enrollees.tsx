@@ -1,12 +1,10 @@
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Heading, Text } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { AppBar } from '../components/AppBar';
 import { useRouter } from 'next/router';
 import { EnrolleeList } from '../components/EnrolleeList';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import useAnchorProgram from '../hooks/useAnchorProgram';
-import useAnchorProvider from '../hooks/useAnchorProvider';
+import { useWallet } from '@solana/wallet-adapter-react';
 import styles from '../styles/Home.module.css';
 
 const AddRequirements: NextPage = () => {
