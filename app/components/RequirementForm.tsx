@@ -32,6 +32,8 @@ export const RequirementForm: FC = () => {
       program.programId
     );
 
+    console.log(certificationAddress);
+
     const tx = await program.methods
       .addRequirement(reqModule, reqCredits)
       .accounts({
@@ -42,7 +44,7 @@ export const RequirementForm: FC = () => {
       })
       .rpc();
 
-    console.log('Account Created (Certification)', tx);
+    console.log('Account Created (Requirement)', tx);
     router.push('/');
   };
 

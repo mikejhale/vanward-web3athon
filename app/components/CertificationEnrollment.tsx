@@ -60,6 +60,7 @@ export const CertificationEnrollment: FC = () => {
     );
 
     console.log('Enrollment Account', enrollAccount);
+    router.push('/');
   };
 
   return (
@@ -80,14 +81,7 @@ export const CertificationEnrollment: FC = () => {
           </Text>{' '}
           {certification?.id}
         </Text>
-        {certification?.year && (
-          <Text fontSize={18} mb={6}>
-            <Text as='span' fontWeight={500}>
-              Year:
-            </Text>{' '}
-            {certification?.year}
-          </Text>
-        )}
+
         {certQuery ? (
           <Button
             width='200px'

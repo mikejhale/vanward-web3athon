@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useState, useEffect } from 'react';
-import { Box, Text, Button } from '@chakra-ui/react';
+import { Box, Text, Button, Spinner } from '@chakra-ui/react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import NextLink from 'next/link';
 import useAnchorProgram from '../hooks/useAnchorProgram';
@@ -16,6 +16,7 @@ export const CertificationList: FC = () => {
   const provider = useAnchorProvider(connection, wallet);
   const program = useAnchorProgram(provider);
   const certFilter = useMemcmp(8, provider.wallet.publicKey.toBase58());
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let certsWithReqs: CertificationType[] = [];
@@ -44,6 +45,7 @@ export const CertificationList: FC = () => {
         certsWithReqs.push(cr);
       }
       setCertifications(certsWithReqs);
+      setIsLoading(false);
     };
 
     getReqs();

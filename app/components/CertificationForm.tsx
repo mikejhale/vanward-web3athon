@@ -40,8 +40,8 @@ export const CertificationForm: FC = () => {
       })
       .rpc();
 
-    console.log('Account Created (Certification)', tx);
-    router.push('/');
+    console.log('Account Created (Certification)', certificationPda);
+    router.push('/add-requirements?cert=' + certificationPda);
   };
 
   return (

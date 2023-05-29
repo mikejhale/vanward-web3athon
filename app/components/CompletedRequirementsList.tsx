@@ -7,6 +7,7 @@ import { RiCheckboxCircleLine, RiCheckLine } from 'react-icons/ri';
 import useAnchorProgram from '../hooks/useAnchorProgram';
 import useAnchorProvider from '../hooks/useAnchorProvider';
 import useMemcmp from '../hooks/useMemcmp';
+import { set } from '@coral-xyz/anchor/dist/cjs/utils/features';
 
 type EnrolleeProps = {
   enrollee: string;
@@ -28,8 +29,9 @@ export const CompletedRequirementsList = (props: EnrolleeProps) => {
   const provider = useAnchorProvider(connection, wallet);
   const program = useAnchorProgram(provider);
   const reqFilter = useMemcmp(8, new PublicKey(props.certification).toBase58());
+  const [reload, setReload] = useState<boolean>(false);
 
-  console.log(new PublicKey(props.certification).toBase58());
+  //console.log(new PublicKey(props.certification).toBase58());
 
   useEffect(() => {
     const getRequirements = async () => {
@@ -68,7 +70,7 @@ export const CompletedRequirementsList = (props: EnrolleeProps) => {
     };
 
     getCompletedRequirements();
-  }, []);
+  }, [reload]);
 
   const markComplete = async (requirement: string) => {
     const [completePda, completeBump] = await PublicKey.findProgramAddressSync(
@@ -94,6 +96,8 @@ export const CompletedRequirementsList = (props: EnrolleeProps) => {
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
+
+    setReload(!reload);
   };
 
   console.log(props);
