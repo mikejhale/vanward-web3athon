@@ -1,14 +1,12 @@
 use anchor_lang::prelude::*;
 
-pub mod certification;
-pub mod completion;
-pub mod enrollment;
-pub mod requirement;
-
-use certification::*;
-use completion::*;
-use enrollment::*;
-use requirement::*;
+mod certification;
+mod contexts;
+mod enrollment;
+mod errors;
+mod models;
+mod requirement;
+use contexts::*;
 
 declare_id!("Hh89oGmpZ15RCsDgueaAAcSNG9WVuy79HzYdcgLUp1d3");
 
@@ -40,7 +38,12 @@ pub mod vanward {
     }
 
     // mark requirement as complete
-    pub fn complete(ctx: Context<CompleteRequirement>) -> Result<()> {
-        completion::complete(ctx)
+    pub fn complete_requirement(ctx: Context<CompleteRequirement>) -> Result<()> {
+        requirement::complete_requirement(ctx)
+    }
+
+    // mark certification as complete
+    pub fn complete_certification(ctx: Context<CompleteCertification>) -> Result<()> {
+        certification::complete_certification(ctx)
     }
 }
