@@ -44,7 +44,7 @@ describe('vanward', async () => {
       .addCertification(certificationId, certificationYear, certificationTitle)
       .accounts({
         certification: certificationPda,
-        user: provider.wallet.publicKey,
+        authority: provider.wallet.publicKey,
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
@@ -53,40 +53,9 @@ describe('vanward', async () => {
       certificationPda
     );
 
-    expect(certAccount.id).equals(certificationId);
-    expect(certAccount.year).equals(certificationYear);
-    expect(certAccount.title).equals(certificationTitle);
-  });
-
-  it('can add an enrollment', async () => {
-    const [enrollmentPda, enrollBump] =
-      await web3.PublicKey.findProgramAddressSync(
-        [
-          utils.bytes.utf8.encode('enroll'),
-          provider.wallet.publicKey.toBuffer(),
-          certificationPda.toBuffer(),
-        ],
-        program.programId
-      );
-
-    enrollPda = enrollmentPda.toString();
-
-    const tx = await program.methods
-      .enroll()
-      .accounts({
-        enrollment: enrollmentPda,
-        user: provider.wallet.publicKey,
-        certification: certificationPda,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .rpc();
-
-    let enrollAccount = await program.account.enrollment.fetch(
-      enrollmentPda.toString()
-    );
-    expect(enrollAccount.certification.toString()).equals(
-      certificationPda.toString()
-    );
+    expect(certAccount.id).to.equal(certificationId);
+    expect(certAccount.year).to.equal(certificationYear);
+    expect(certAccount.title).to.equal(certificationTitle);
   });
 
   it('can add a requirement', async () => {
@@ -110,7 +79,7 @@ describe('vanward', async () => {
       .accounts({
         requirement: requirementPda,
         certification: certificationPda,
-        user: provider.wallet.publicKey,
+        authority: provider.wallet.publicKey,
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
@@ -118,100 +87,16 @@ describe('vanward', async () => {
     let reqAccount = await program.account.requirement.fetch(
       requirementPda.toString()
     );
-    expect(reqAccount.module).equals(certificationId);
-    expect(reqAccount.credits).equals(credits);
-  });
+    expect(reqAccount.module).to.equal(certificationId);
+    expect(reqAccount.credits).to.equal(credits);
 
-  it('can mark as complete', async () => {
-    const [completePda, completeBump] = await PublicKey.findProgramAddressSync(
-      [
-        utils.bytes.utf8.encode('complete'),
-        new PublicKey(enrollPda).toBuffer(),
-        new PublicKey(reqPda).toBuffer(),
-      ],
-      program.programId
+    let certAccount = await program.account.certification.fetch(
+      certificationPda.toString()
     );
 
-    const tx = await program.methods
-      .complete()
-      .accounts({
-        completion: completePda,
-        user: provider.wallet.publicKey,
-        owner: enrollPda,
-        requirement: reqPda,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .rpc();
-
-    let completeAccount = await program.account.completion.fetch(
-      completePda.toString()
-    );
-
-    expect(completeAccount.bump).equals(completeBump);
-  });
-
-  //console.log(completePda.toString());
-
-  /*
-  it('can add mark a requirement complete', async () => {
-    const [completePda, completeBump] = await PublicKey.findProgramAddressSync(
-      [
-        utils.bytes.utf8.encode('complete'),
-        new PublicKey(enrollPda).toBuffer(),
-        new PublicKey(reqPda).toBuffer(),
-      ],
-      program.programId
-    );
-
-    console.log(completePda.toString());
-
-    const tx = await program.methods
-      .complete()
-      .accounts({
-        completion: completePda,
-        user: provider.wallet.publicKey,
-        owner: enrollPda,
-        requirement: reqPda,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .rpc();
-
-    let completeAccount = await program.account.completion.fetch(completePda);
-
-    expect(completeAccount.bump).equals(completeBump);
-  });
-
-
-
-  it('can add a requirement', async () => {
-    const module = 'Week 1';
-    const credits = 1;
-
-    const [requirementPda, reqPda] =
-      await web3.PublicKey.findProgramAddressSync(
-        [
-          utils.bytes.utf8.encode('requirement'),
-          utils.bytes.utf8.encode(certificationId),
-          provider.wallet.publicKey.toBuffer(),
-        ],
-        program.programId
-      );
-
-    const tx = await program.methods
-      .addRequirement(certificationId, credits)
-      .accounts({
-        requirement: requirementPda,
-        certification: certificationPda,
-        user: provider.wallet.publicKey,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .rpc();
-
-    let reqAccount = await program.account.requirement.fetch(
+    expect(certAccount.requirements[0].toString()).to.equal(
       requirementPda.toString()
     );
-    expect(reqAccount.module).equals(certificationId);
-    expect(reqAccount.credits).equals(credits);
   });
 
   it('can get certification requirements', async () => {
@@ -223,7 +108,7 @@ describe('vanward', async () => {
         },
       },
     ]);
-    expect(reqAccounts[0].account.module).equals(certificationId);
+    expect(reqAccounts[0].account.module).to.equal(certificationId);
   });
 
   it('can add an enrollment', async () => {
@@ -237,11 +122,13 @@ describe('vanward', async () => {
         program.programId
       );
 
+    enrollPda = enrollmentPda.toString();
+
     const tx = await program.methods
       .enroll()
       .accounts({
         enrollment: enrollmentPda,
-        user: provider.wallet.publicKey,
+        authority: provider.wallet.publicKey,
         certification: certificationPda,
         systemProgram: web3.SystemProgram.programId,
       })
@@ -250,38 +137,107 @@ describe('vanward', async () => {
     let enrollAccount = await program.account.enrollment.fetch(
       enrollmentPda.toString()
     );
-    expect(enrollAccount.certification.toString()).equals(
+    expect(enrollAccount.certification.toString()).to.equal(
       certificationPda.toString()
     );
+    expect(enrollAccount.complete).to.equal(false);
   });
 
-
-  it('can add a professional by Address', async () => {
-    const userKeypair = Keypair.generate();
-
-    const professionalPda, proBump =
-      await web3.PublicKey.findProgramAddressSync(
-        [
-          utils.bytes.utf8.encode('professional'),
-          userKeypair.publicKey.toBuffer(),
-          provider.wallet.publicKey.toBuffer(),
-        ],
-        program.programId
-      );
+  it('can mark requirement as complete', async () => {
+    const [completePda, completeBump] = await PublicKey.findProgramAddressSync(
+      [
+        utils.bytes.utf8.encode('complete'),
+        new PublicKey(enrollPda).toBuffer(),
+        new PublicKey(reqPda).toBuffer(),
+      ],
+      program.programId
+    );
 
     const tx = await program.methods
-      .addProfessional(userKeypair.publicKey.toString(), proBump)
+      .completeRequirement()
       .accounts({
-        professional: professionalPda,
-        user: provider.wallet.publicKey,
-        owner: userKeypair.publicKey,
+        completion: completePda,
+        authority: provider.wallet.publicKey,
+        enrollment: enrollPda,
+        requirement: reqPda,
+        certification: certificationPda.toString(),
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
 
-    let proAccount = await program.account.professional.fetch(professionalPda);
-    expect(proAccount.id).equals(userKeypair.publicKey.toString());
+    let completeAccount = await program.account.completion.fetch(
+      completePda.toString()
+    );
+
+    expect(completeAccount.bump).equals(completeBump);
   });
 
-  */
+  // test that all certification requirements are complete by enrollee
+  it('can check if all requirements are complete', async () => {
+    // let cert = await program.account.certification.fetch(
+    //   certificationPda.toString()
+    // );
+
+    let enroll = await program.account.enrollment.all([
+      {
+        memcmp: {
+          offset: 8 + 32,
+          bytes: provider.wallet.publicKey.toBase58(),
+        },
+      },
+    ]);
+
+    expect(enroll.length).to.equal(1);
+
+    let reqs = await program.account.requirement.all([
+      {
+        memcmp: {
+          offset: 8,
+          bytes: certificationPda.toBase58(),
+        },
+      },
+    ]);
+    expect(reqs.length).to.equal(1);
+
+    const reqAccts = Array.from(reqs, (r) => {
+      return {
+        pubkey: r.publicKey,
+        isWritable: false,
+        isSigner: false,
+      };
+    });
+
+    let completions = await program.account.completion.all([
+      {
+        memcmp: {
+          offset: 8 + 32,
+          bytes: enroll[0].publicKey.toBase58(),
+        },
+      },
+    ]);
+    expect(completions.length).to.equal(1);
+
+    const compAccts = Array.from(completions, (c) => {
+      return {
+        pubkey: c.publicKey,
+        isWritable: false,
+        isSigner: false,
+      };
+    });
+
+    const tx = await program.methods
+      .completeCertification()
+      .accounts({
+        certification: certificationPda,
+        authority: provider.wallet.publicKey,
+        enrollment: enroll[0].publicKey,
+      })
+      .remainingAccounts(reqAccts.concat(compAccts))
+      .rpc();
+
+    let complete_enroll = await program.account.enrollment.fetch(
+      enroll[0].publicKey.toString()
+    );
+    expect(complete_enroll.complete).to.equal(true);
+  });
 });
